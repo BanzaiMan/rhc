@@ -43,8 +43,9 @@ module RHC::Commands
     summary 'Add SSH key to the user account'
     syntax ""
     argument :key, 'SSH public key filepath', ["-k", "--ssh key-filepath"]
+    option ["--timeout timeout"], "Timeout, in seconds, for the session"
     def add
-      
+      add_or_update_key 'add', options.identifier, options.ssh, options.rhlogin, options.password
     end
 
     summary 'Update SSH key for the user account'
