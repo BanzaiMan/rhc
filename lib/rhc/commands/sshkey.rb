@@ -55,8 +55,10 @@ module RHC::Commands
 
     summary 'Remove SSH key from the user account'
     alias_action :delete
+    option ["--timeout timeout"], "Timeout, in seconds, for the session"
     def remove
-      
+      data = {:rhlogin => options.rhlogin, :key_name => options.identifier, :action => 'remove-key'}
+      handle_key_mgmt_response URI.parse("https://#{RHC::Config[libra_server]}/broker/ssh_keys"), data, options.password      
     end
 
   end
