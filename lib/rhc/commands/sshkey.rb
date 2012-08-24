@@ -14,7 +14,7 @@ module RHC::Commands
     alias_action :show
     option ["--timeout timeout"], "Timeout, in seconds, for the session"
     def list
-      ssh_keys = RHC::get_ssh_keys('openshift.redhat.com', options.rhlogin, options.password, RHC::Config.default_proxy)
+      ssh_keys = RHC::get_ssh_keys(RHC::Config[libra_server], options.rhlogin, options.password, RHC::Config[default_proxy])
       additional_ssh_keys = ssh_keys['keys']
   
       puts ""
