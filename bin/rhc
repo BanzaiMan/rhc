@@ -16,7 +16,6 @@ Command line tool for performing operations related to your rhcloud account.
 List of resources
   domain             Manage the namespace for the registered rhcloud user.
   app                Manage applications within the rhcloud account.
-  sshkey             Manage multiple keys for the registered rhcloud user.
   port-forward       Forward remote ports to the workstation
   server             Display information about the status of the service.
   setup              Run the setup wizard to configure your account.
@@ -47,10 +46,6 @@ begin
   when "app"
     run_setup_wizard_if_needed
     system("rhc-app #{get_args} 2>&1")
-    retcode = $?.exitstatus
-  when "sshkey"
-    run_setup_wizard_if_needed
-    system("rhc-sshkey #{get_args} 2>&1")
     retcode = $?.exitstatus
   when "port-forward"
     run_setup_wizard_if_needed
