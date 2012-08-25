@@ -97,6 +97,16 @@ module RHC
 
         raise RHC::KeyNotFoundException.new("Key #{name} does not exist")
       end
+      
+      def find_all_keys
+        logger.debug "Finding all keys for #{user.login}" if @mydebug
+        user.keys
+      end
+      
+      def add_key(name, key, content)
+        logger.debug "Adding key #{key} for #{user.login}" if @mydebug
+        user.add_key name, key, content
+      end
 
       def logout
         #TODO logout

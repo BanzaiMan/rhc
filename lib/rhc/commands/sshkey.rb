@@ -1,9 +1,6 @@
 #! /usr/bin/env ruby
 
-require 'rhc/coverage_helper'
 require 'rhc/commands/base'
-require 'rhc/config'
-require 'rhc/vendor/sshkey'
 
 module RHC::Commands
   class SshKey < Base
@@ -16,20 +13,19 @@ module RHC::Commands
     alias_action :show
     option ["--timeout timeout"], "Timeout, in seconds, for the session"
     def list
-      ssh_keys = RHC::get_ssh_keys(RHC::Config[libra_server], options.rhlogin, options.password, RHC::Config[default_proxy])
-      additional_ssh_keys = ssh_keys['keys']
-      
-      keys = []
-      # top-level key will be named 'default'
-      keys << SSHPublicKey.new(ssh_keys)
-      additional_ssh_keys.each do |k, v|
-        keys << SSHPublicKey.new('name' => k, 'ssh_type' => v['type'], 'fingerprint' => v['fingerprint'])
-      end
+      ssh_keys = rest_client.find_all_keys
+      ssh_keys.each do |key|
+        puts key.format(ERB.new <<-FORMAT)
+       Name: <%= name %>
+       Type: <%= type %>
+Fingerprint: <%= Net::SSH::KeyFactory.load_data_public_key(
+            "#{key.type} #{key.content}").fingerprint %>
 
-      puts "\nSSH keys\n========"
-      puts keys.map {|k| k.to_s}
-      
-      true
+        FORMAT
+      end
+      # each user should have at least one SSH key, so we should not have to 
+      # worry about 'ssh_keys' being empty, but you'd never know
+      !ssh_keys.empty? 
     end
 
     summary 'Add SSH key to the user account'
@@ -38,7 +34,9 @@ module RHC::Commands
     option ["--timeout timeout"], "Timeout, in seconds, for the session"
     option ['-i', '--identifier name'], 'Identifier for this key'
     def add(key)
-      add_or_update_key 'add', options.identifier, key, options.rhlogin, options.password
+      type, content, comment = File.open(key).gets.chomp.split
+      rest_client.add_key(options.identifier, content, type)
+      0
     end
 
     summary 'Update SSH key for the user account'
@@ -55,26 +53,5 @@ module RHC::Commands
       handle_key_mgmt_response URI.parse("https://#{RHC::Config[libra_server]}/broker/ssh_keys"), data, options.password      
     end
     
-    private
-    ## given a hash with keys 'name', 'ssh_type' and 'fingerprint', treat it
-    ## as though it is a representation of an SSH public key.
-    ## We can't use RHC::Vendor::SSHKey here, since that requires access to
-    ## a private key, which we don't have
-    class SSHPublicKey
-      attr_reader :name, :type, :finger_print
-      def initialize(data)
-        @name = data['name'] || 'default'
-        @type = data['ssh_type']
-        @finger_print = data['fingerprint']
-      end
-      
-      def to_s
-        puts "       Name: #{name}"
-        puts "       Type: #{type}"
-        puts "Fingerprint: #{finger_print}"
-        puts ""
-      end
-    end
-
   end
 end

@@ -29,6 +29,10 @@ module RHC
         return request(request)
       end
       alias :delete :destroy
+      
+      def format(erb)
+        erb.result(binding)
+      end
     end
   end
 end
