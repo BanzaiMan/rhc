@@ -40,7 +40,7 @@ Fingerprint: <%= Net::SSH::KeyFactory.load_data_public_key(
     def add(key)
       type, content, comment = File.open(key).gets.chomp.split
       rest_client.add_key(options.identifier, content, type)
-      results { say "SSH key #{key} has been added as #{options.identifier}" }
+      results { say "SSH key #{key} has been added as '#{options.identifier}'" }
       0
     end
 
