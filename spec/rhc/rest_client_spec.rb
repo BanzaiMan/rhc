@@ -29,6 +29,7 @@ module RHC
       let(:domain_0_links) { mock_response_links(mock_domain_links('mock_domain_0')) }
       let(:domain_1_links) { mock_response_links(mock_domain_links('mock_domain_1')) }
       let(:user_links)     { mock_response_links(mock_user_links) }
+      let(:key_links)      { mock_response_links(mock_key_links) }
 
       context "#new" do
         before do
@@ -363,6 +364,29 @@ module RHC
           end
         end
 
+        context "#delete_key" do
+          before(:each) do
+            stub_user_request
+            stub_keys_request
+
+            stub_api_request(:post, key_links['DELETE']['relative']).
+              to_return({ :body   => {}.to_json,
+                          :status => 200
+                        })
+
+            @client = MockClient.new(mock_href, mock_user, mock_pass)
+          end
+          
+          it "should delete keys" do
+            expect { @client.delete_key('mock_key_0') }.should be_true
+          end
+          
+          it 'raises an error if nonexistent key is requested' do
+            expect { @client.find_key('no_match') }.
+              should raise_error(RHC::KeyNotFoundException)
+          end
+        end
+        
         context "#logout" do
           let(:logout_method) { :logout }
           it_should_behave_like "a logout method"
