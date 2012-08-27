@@ -38,6 +38,7 @@ Fingerprint: <%= Net::SSH::KeyFactory.load_data_public_key(
     def add(key)
       type, content, comment = File.open(key).gets.chomp.split
       rest_client.add_key(options.identifier, content, type)
+      results { say "SSH key #{key} has been added as #{options.identifier}" }
       0
     end
 
@@ -53,7 +54,7 @@ Fingerprint: <%= Net::SSH::KeyFactory.load_data_public_key(
     option ["--timeout timeout"], "Timeout, in seconds, for the session"
     def remove(name)
       rest_client.delete_key(name)
-      say "SSH key '#{name}' has been removed"
+      results { say "SSH key '#{name}' has been removed" }
       0
     end
     
