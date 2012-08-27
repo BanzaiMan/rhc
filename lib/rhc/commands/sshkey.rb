@@ -15,13 +15,15 @@ module RHC::Commands
     def list
       ssh_keys = rest_client.find_all_keys
       ssh_keys.each do |key|
-        puts key.format(ERB.new <<-FORMAT)
+        results do
+          say key.format(ERB.new <<-FORMAT)
        Name: <%= name %>
        Type: <%= type %>
 Fingerprint: <%= Net::SSH::KeyFactory.load_data_public_key(
             "#{key.type} #{key.content}").fingerprint %>
 
-        FORMAT
+          FORMAT
+        end
       end
       # each user should have at least one SSH key, so we should not have to 
       # worry about 'ssh_keys' being empty, but you'd never know
