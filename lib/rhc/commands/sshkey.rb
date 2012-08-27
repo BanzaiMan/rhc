@@ -47,10 +47,12 @@ Fingerprint: <%= Net::SSH::KeyFactory.load_data_public_key(
 
     summary 'Remove SSH key from the user account'
     alias_action :delete
+    argument :name, 'SSH key to remove', ['-k']
     option ["--timeout timeout"], "Timeout, in seconds, for the session"
-    def remove
-      data = {:rhlogin => options.rhlogin, :key_name => options.identifier, :action => 'remove-key'}
-      handle_key_mgmt_response URI.parse("https://#{RHC::Config[libra_server]}/broker/ssh_keys"), data, options.password      
+    def remove(name)
+      rest_client.delete_key(name)
+      say "SSH key '#{name}' has been removed"
+      0
     end
     
   end

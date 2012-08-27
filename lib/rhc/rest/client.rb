@@ -107,6 +107,12 @@ module RHC
         logger.debug "Adding key #{key} for #{user.login}" if @mydebug
         user.add_key name, key, content
       end
+      
+      def delete_key(name)
+        logger.debug "Deleting key '#{name}'" if @mydebug
+        key = find_key(name)
+        key.destroy
+      end
 
       def logout
         #TODO logout
