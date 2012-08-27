@@ -400,8 +400,33 @@ module RHC
 
         context "#delete_key" do
           before(:each) do
-            stub_user_request
-            stub_keys_request
+            stub_api_request(:any, client_links['GET_USER']['relative']).
+              to_return({ :body   => {
+                            :type => 'user',
+                            :data =>
+                            { :login => mock_user,
+                              :links => mock_response_links(mock_user_links)
+                            }
+                          }.to_json,
+                          :status => 200
+                        })
+            stub_api_request(:any, user_links['LIST_KEYS']['relative']).
+              to_return({ :body   => {
+                            :type => 'keys',
+                            :data =>
+                            [{ :name    => 'mock_key_0',
+                               :type    => 'mock_key_0_type',
+                               :content => '123456789:0',
+                               :links   => mock_response_links(mock_key_links('mock_key_0'))
+                             },
+                             { :name    => 'mock_key_1',
+                               :type    => 'mock_key_1_type',
+                               :content => '123456789:1',
+                               :links   => mock_response_links(mock_key_links('mock_key_1'))
+                             }]
+                          }.to_json,
+                          :status => 200
+                        })
 
             stub_api_request(:post, key_links['DELETE']['relative']).
               to_return({ :body   => {}.to_json,
