@@ -39,11 +39,11 @@ describe RHC::Commands::SshKey do
       
       before :each do
         @rc = MockRestClient.new
-        @keys = @rc.find_all_keys
       end
       
       it 'deletes the key' do
-        num_keys = @keys.length
+        keys = @rc.find_all_keys
+        num_keys = keys.length
         expect {run}.should exit_with_code(0)
         @rc.find_all_keys.length.should == num_keys - 1
       end
@@ -70,7 +70,7 @@ describe RHC::Commands::SshKey do
       let (:arguments) { %w[sshkey update] }
       
       # RHC::Commands::SshKey#update throws RuntimeError, but it is swallowed
-      # up by the wrapper, so we only see status code 1.
+      # up by the wrapper, so we only see status code 128.
       it "exits with status code 1" do
         expect {run}.should exit_with_code(128)
       end
