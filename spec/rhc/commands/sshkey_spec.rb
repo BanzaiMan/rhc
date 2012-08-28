@@ -72,7 +72,7 @@ describe RHC::Commands::SshKey do
       # RHC::Commands::SshKey#update throws RuntimeError, but it is swallowed
       # up by the wrapper, so we only see status code 1.
       it "exits with status code 1" do
-        expect {run}.should exit_with_code(1)
+        expect {run}.should exit_with_code(128)
       end
     end
   end
