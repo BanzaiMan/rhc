@@ -12,7 +12,7 @@ describe RHC::Commands::SshKey do
       
     context "when run with list command" do
       
-      let(:arguments) { ['sshkey', 'list', '--noprompt', '--config', 'test.conf', '-l', 'test@test.foo', '-p',  'password', '--trace'] }
+      let(:arguments) { %w[sshkey list --noprompt --config test.conf -l test@test.foo -p  password --trace] }
 
       before(:each) do
         @rc = MockRestClient.new
