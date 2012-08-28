@@ -57,7 +57,7 @@ describe RHC::Commands::SshKey do
         @keys = @rc.find_all_keys
       end
       
-      it 'deletes the key' do
+      it 'leaves keys untouched' do
         num_keys = @keys.length
         expect {run}.should exit_with_code(0)
         @rc.find_all_keys.length.should == num_keys
