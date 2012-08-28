@@ -25,7 +25,7 @@ describe RHC::Commands::SshKey do
   
   describe "add" do
     context "when adding a valid key" do
-      let(:arguments) { %w[add -l test@test.foo -p password id_dsa.pub] }
+      let(:arguments) { %w[sshkey add --noprompt --config test.conf -l test@test.foo -p password -i foobar id_rsa.pub] }
     
       before :each do
         @rc = MockRestClient.new
