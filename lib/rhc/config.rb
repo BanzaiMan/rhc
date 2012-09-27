@@ -172,7 +172,11 @@ module RHC
     end
 
     def should_run_ssh_wizard?
-      not File.exists? @ssh_priv_key_file_path
+      not (File.exists? @ssh_priv_key_file_path or ssh_public_key_readable?)
+    end
+    
+    def ssh_public_key_readable?
+      File.exists? @ssh_pub_key_file_path and File.readable? @ssh_pub_key_file_path
     end
 
     ##
