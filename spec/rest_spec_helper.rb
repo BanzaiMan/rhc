@@ -274,6 +274,10 @@ module RestSpecHelper
       add_cartridge(type, false) if type
       @framework = type
       @messages = []
+      @user = mock_user
+      @pass = mock_pass
+      @headers = {:accept => :json}
+      set_auth_header
     end
 
     def destroy
