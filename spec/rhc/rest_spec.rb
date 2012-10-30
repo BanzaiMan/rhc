@@ -57,6 +57,7 @@ module RHC
         it "deserializes to an application" do
           json_response = { :type => 'application', :data => object, :messages => [{'text' => 'test message'}]}.to_json
           app_obj       = RHC::Rest::Application.new(object)
+          app_obj.set_creds mock_user, mock_pass
           subject.parse_response(json_response).should have_same_attributes_as(app_obj)
         end
       end
@@ -82,7 +83,9 @@ module RHC
         it "deserializes to a list of applications" do
           json_response = { :type => 'applications', :data => object }.to_json
           app_obj_1     = RHC::Rest::Application.new(object[0])
+          app_obj_1.set_creds mock_user, mock_pass
           app_obj_2     = RHC::Rest::Application.new(object[1])
+          app_obj_2.set_creds mock_user, mock_pass
           subject.parse_response(json_response).length.should equal(2)
           subject.parse_response(json_response)[0].should have_same_attributes_as(app_obj_1)
           subject.parse_response(json_response)[1].should have_same_attributes_as(app_obj_2)
@@ -99,6 +102,7 @@ module RHC
         it "deserializes to a cartridge" do
           json_response = { :type => 'cartridge', :data => object }.to_json
           cart_obj      = RHC::Rest::Cartridge.new(object)
+          cart_obj.set_creds mock_user, mock_pass
           subject.parse_response(json_response).should have_same_attributes_as(cart_obj)
         end
       end
@@ -117,7 +121,9 @@ module RHC
         it "deserializes to a list of cartridges" do
           json_response = { :type => 'cartridges', :data => object }.to_json
           cart_obj_1    = RHC::Rest::Cartridge.new(object[0])
+          cart_obj_1.set_creds mock_user, mock_pass
           cart_obj_2    = RHC::Rest::Cartridge.new(object[1])
+          cart_obj_2.set_creds mock_user, mock_pass
           subject.parse_response(json_response).length.should equal(2)
           subject.parse_response(json_response)[0].should have_same_attributes_as(cart_obj_1)
           subject.parse_response(json_response)[1].should have_same_attributes_as(cart_obj_2)
@@ -133,6 +139,7 @@ module RHC
         it "deserializes to a domain" do
           json_response = { :type => 'domain', :data => object }.to_json
           dom_obj       = RHC::Rest::Domain.new(object)
+          dom_obj.set_creds mock_user, mock_pass
           subject.parse_response(json_response).should have_same_attributes_as(dom_obj)
         end
       end
@@ -149,7 +156,9 @@ module RHC
         it "deserializes to a list of domains" do
           json_response = { :type => 'domains', :data => object }.to_json
           dom_obj_1     = RHC::Rest::Domain.new(object[0])
+          dom_obj_1.set_creds mock_user, mock_pass
           dom_obj_2     = RHC::Rest::Domain.new(object[1])
+          dom_obj_2.set_creds mock_user, mock_pass
           subject.parse_response(json_response).length.should equal(2)
           subject.parse_response(json_response)[0].should have_same_attributes_as(dom_obj_1)
           subject.parse_response(json_response)[1].should have_same_attributes_as(dom_obj_2)
@@ -167,6 +176,7 @@ module RHC
         it "deserializes to a key" do
           json_response = { :type => 'key', :data => object }.to_json
           key_obj       = RHC::Rest::Key.new(object)
+          key_obj.set_creds mock_user, mock_pass
           subject.parse_response(json_response).should have_same_attributes_as(key_obj)
         end
       end
@@ -187,7 +197,9 @@ module RHC
         it "deserializes to a list of keys" do
           json_response = { :type => 'keys', :data => object }.to_json
           key_obj_1     = RHC::Rest::Key.new(object[0])
+          key_obj_1.set_creds mock_user, mock_pass
           key_obj_2     = RHC::Rest::Key.new(object[1])
+          key_obj_2.set_creds mock_user, mock_pass
           subject.parse_response(json_response).length.should equal(2)
           subject.parse_response(json_response)[0].should have_same_attributes_as(key_obj_1)
           subject.parse_response(json_response)[1].should have_same_attributes_as(key_obj_2)
@@ -203,6 +215,7 @@ module RHC
         it "deserializes to a user" do
           json_response = { :type => 'user', :data => object }.to_json
           user_obj      = RHC::Rest::User.new(object)
+          user_obj.set_creds mock_user, mock_pass
           subject.parse_response(json_response).should have_same_attributes_as(user_obj)
         end
       end
@@ -228,6 +241,7 @@ module RHC
 
         it "sends the response to be deserialized" do
           dom_obj = RHC::Rest::Domain.new(object)
+          dom_obj.set_creds mock_user, mock_pass
           request = RestClient::Request.new(:url     => mock_href,
                                             :method  => 'get',
                                             :headers => { :accept => :json },
