@@ -18,11 +18,15 @@ module RHCHelper
       @logger = logger
       original_formatter = Logger::Formatter.new
       @logger.formatter = proc { |severity, datetime, progname, msg|
-        # Filter out any passwords
-        filter_msg = msg.gsub(PASSWORD_REGEX, " -p ***** ") 
-
-        # Format with the original formatter
-        original_formatter.call(severity, datetime, progname, filter_msg)
+        begin
+          # Filter out any passwords
+          filter_msg = msg.gsub(PASSWORD_REGEX, " -p ***** ") 
+        rescue ArgumentError # msg can contain invalid byte sequences
+          filger_msg = 'Encountered problem filtering a message.'
+        ensure
+          # Format with the original formatter
+          original_formatter.call(severity, datetime, progname, filter_msg)
+        end
       }
     end
 
