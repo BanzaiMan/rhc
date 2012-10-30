@@ -98,25 +98,29 @@ module RHC
         domains = Array.new
         data.each do |domain_json|
           dom = Domain.new(domain_json, @debug, @api_version)
-          dom.headers.merge! dom.auth_header(@user, @pass)
+          dom.set_creds @user, @pass
+          dom.headers.merge! dom.auth_header
           domains.push(dom)
         end
         return domains
       when 'domain'
         dom = Domain.new(data, @debug, @api_version)
-        dom.headers.merge! dom.auth_header(@user, @pass)
+        dom.set_creds @user, @pass
+        dom.headers.merge! dom.auth_header
         return dom
       when 'applications'
         apps = Array.new
         data.each do |app_json|
           app = Application.new(app_json, @debug, @api_version)
-          app.headers.merge! app.auth_header(@user, @pass)
+          app.set_creds @user, @pass
+          app.headers.merge! app.auth_header
           apps.push(app)
         end
         return apps
       when 'application'
         app = Application.new(data, @debug, @api_version)
-        app.headers.merge! app.auth_header(@user, @pass)
+        app.set_creds @user, @pass
+        app.headers.merge! app.auth_header
         result['messages'].each do |message|
           app.add_message(message['text']) if message['field'].nil? or message['field'] == 'result'
         end
@@ -125,35 +129,41 @@ module RHC
         carts = Array.new
         data.each do |cart_json|
           cart = Cartridge.new(cart_json, @debug, @api_version)
-          cart.headers.merge! cart.auth_header(@user, @pass)
+          cart.set_creds @user, @pass
+          cart.headers.merge! cart.auth_header
           carts.push(cart)
         end
         return carts
       when 'cartridge'
         cart = Cartridge.new(data, @debug, @api_version)
-        cart.headers.merge! cart.auth_header(@user, @pass)
+        cart.set_creds @user, @pass
+        cart.headers.merge! cart.auth_header
         return cart
       when 'user'
         user = User.new(data, @debug, @api_version)
-        user.headers.merge! user.auth_header(@user, @pass)
+        user.set_creds @user, @pass
+        user.headers.merge! user.auth_header
         return user
       when 'keys'
         keys = Array.new
         data.each do |key_json|
           key = Key.new(key_json, @debug, @api_version)
-          key.headers.merge! key.auth_header(@user, @pass)
+          key.set_creds @user, @pass
+          key.headers.merge! key.auth_header
           keys.push(key)
         end
         return keys
       when 'key'
         key = Key.new(data, @debug, @api_version)
-        key.headers.merge! key.auth_header(@user, @pass)
+        key.set_creds @user, @pass
+        key.headers.merge! key.auth_header
         return key
       when 'gear_groups'
         gears = Array.new
         data.each do |gear_json|
           g = GearGroup.new(gear_json, @debug, @api_version)
-          g.headers.merge! g.auth_header(@user, @pass)
+          g.set_creds @user, @pass
+          g.headers.merge! g.auth_header
           gears.push(g)
         end
         return gears

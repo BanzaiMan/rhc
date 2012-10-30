@@ -26,8 +26,12 @@ module RHC
         @messages << msg
       end
 
+      def set_creds(username, password)
+        @user = username
+        @password = password
+      end
+
       def auth_header(username = nil, password = nil)
-        h = {}
         username ||= @user
         password ||= @pass
         if Base64.class.respond_to? :strict_encode64
@@ -35,8 +39,7 @@ module RHC
         else
           credentials = Base64.encode64("#{username}:#{password}").delete("\n")
         end
-        h["Authorization"] = "Basic #{credentials}"
-        h
+        { "Authorization" => "Basic #{credentials}" }
       end
 
       private
