@@ -99,17 +99,17 @@ module RHC::Commands
           output_issues(rest_app)
           return 0
         end
+      end
 
-        if options.git
-          begin
-            run_git_clone(rest_app)
-          rescue RHC::GitException => e
-            warn "#{e}"
-            unless RHC::Helpers.windows? and windows_nslookup_bug?(rest_app)
-              add_issue("We were unable to clone your application's git repo - #{e}",
-                        "Clone your git repo",
-                        "rhc app git-clone #{rest_app.name}")
-            end
+      if options.git
+        begin
+          run_git_clone(rest_app)
+        rescue RHC::GitException => e
+          warn "#{e}"
+          unless RHC::Helpers.windows? and windows_nslookup_bug?(rest_app)
+            add_issue("We were unable to clone your application's git repo - #{e}",
+                      "Clone your git repo",
+                      "rhc app git-clone #{rest_app.name}")
           end
         end
       end
