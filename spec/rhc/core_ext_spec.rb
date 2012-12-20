@@ -3,7 +3,7 @@ require 'rhc/helpers'
 
 describe Hash do
   describe '#deep_cleanse' do
-    HIDDEN = Hash::PASSWORD_MASK
+    HIDDEN = RHC::CoreExt::PASSWORD_MASK
     before :each do
       @clean = {:foo => 'foo', :bar => 'bar'}
       @has_passwd = {:password => 'supersecret', :not_password => 'publicinfo'}

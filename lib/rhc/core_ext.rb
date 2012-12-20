@@ -50,7 +50,6 @@ module OpenURI
 end
 
 class Hash
-  PASSWORD_MASK = "*" * 12
   def stringify_keys!
     keys.each do |key|
       v = delete(key)
@@ -82,12 +81,18 @@ class Hash
         v.map {|e| e.deep_cleanse(key) if e.is_a? Hash}
       else
         if k.to_s == key
-          self[k] = PASSWORD_MASK
+          self[k] = RHC::CoreExt::PASSWORD_MASK
         end
       end
     end
   end
   
+end
+
+module RHC
+  module CoreExt
+    PASSWORD_MASK = '*' * 12
+  end
 end
 
 # Some versions of highline get in an infinite loop when trying to wrap.
