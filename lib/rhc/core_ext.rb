@@ -69,6 +69,24 @@ class Hash
     end
     s
   end
+  
+  # given a potentially nested hash, overwrite the value
+  # if the key matches the given key
+  def deep_cleanse(key)
+    each_pair do |k,v|
+      case v
+      when Hash
+        v.deep_cleanse key
+      when Array
+        v.map {|e| e.deep_cleanse(key) if e.is_a? Hash}
+      else
+        if k.to_s == key
+          self[k] = "*" * 12
+        end
+      end
+    end
+  end
+  
 end
 
 # Some versions of highline get in an infinite loop when trying to wrap.
