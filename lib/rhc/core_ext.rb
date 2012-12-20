@@ -50,6 +50,7 @@ module OpenURI
 end
 
 class Hash
+  PASSWORD_MASK = "*" * 12
   def stringify_keys!
     keys.each do |key|
       v = delete(key)
@@ -81,7 +82,7 @@ class Hash
         v.map {|e| e.deep_cleanse(key) if e.is_a? Hash}
       else
         if k.to_s == key
-          self[k] = "*" * 12
+          self[k] = PASSWORD_MASK
         end
       end
     end
